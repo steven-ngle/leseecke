@@ -1,7 +1,14 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
+from typing import List
 from enum import Enum
 from datetime import datetime, timezone
 
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    username: str
+    email: str
+    password: str
+    books: List["Book"] = Relationship(back_populates="user")
 
 class BookStatus(str, Enum):
     READ = "read"
@@ -15,8 +22,11 @@ class Book(SQLModel, table=True):
     cover: str
     status: BookStatus = Field(default=BookStatus.WANT_TO_READ)
     pages: int | None=None
-    user_id: int = Field(foreign_key="user.id", index=True)
-    
+    rating: int | None = Field(default=None, ge=1, le=5)
+    user_id: int | None = Field(default=None, foreign_key="user.id", index=True)
+    user: User | None = Relationship(back_populates="books")
+    notes: List["Note"] = Relationship(back_populates="book")
+
 def get_utc_now():
     return datetime.now(timezone.utc)
 
@@ -27,9 +37,4 @@ class Note(SQLModel, table=True):
     created_at: datetime = Field(default_factory=get_utc_now)
     updated_at: datetime = Field(default_factory=get_utc_now)
     book_id: int = Field(foreign_key="book.id", index=True)
-
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    username: str
-    email: str
-    password: str
+    book: Book | None = Relationship(back_populates="notes")
