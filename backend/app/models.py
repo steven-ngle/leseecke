@@ -3,6 +3,16 @@ from typing import List
 from enum import Enum
 from datetime import datetime, timezone
 
+class UserCreate(SQLModel):
+    username: str
+    email: str
+    password: str
+
+class UserUpdate(SQLModel):
+    username: str | None = None
+    email: str | None = None
+    password: str | None = None
+
 class User(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     username: str
