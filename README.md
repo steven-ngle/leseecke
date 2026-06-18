@@ -41,12 +41,13 @@ Die API ist dann erreichbar unter `http://localhost:8000`.
 Interaktive Dokumentation (Swagger UI): `http://localhost:8000/docs`
  
 ## Projektstruktur
- 
+
+```
 leseecke/
 ├── backend/         # FastAPI-Anwendung
 ├── pyproject.toml   # Projektdefinition & Abhängigkeiten
 ├── uv.lock          # Lockfile
 └── README.md
-
+```
 
  
